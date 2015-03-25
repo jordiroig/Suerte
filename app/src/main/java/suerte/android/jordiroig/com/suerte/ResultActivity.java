@@ -37,13 +37,13 @@ public class ResultActivity extends ActionBarActivity {
 
         if(num == value) //comprovamos si el jugador ha acertado
         {
-            result.setText("Bien!!\nAcertado!!!!");
-            result.setTextColor(Color.GREEN);
+            result.setText("Bien!!\nAcertado!!!!"); //seteamos el texto
+            result.setTextColor(Color.GREEN);       //seteamos el color
         }
         else
         {
-            result.setText("Fallo...\nVuelve a intentarlo");
-            result.setTextColor(Color.RED);
+            result.setText("Fallo...\nVuelve a intentarlo");    //seteamos el texto
+            result.setTextColor(Color.RED);                     //seteamos el color
         }
     }
 
