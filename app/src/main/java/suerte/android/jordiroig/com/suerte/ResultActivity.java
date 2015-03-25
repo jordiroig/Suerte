@@ -10,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.util.Random;
 
-
 public class ResultActivity extends ActionBarActivity {
 
     @Override
@@ -43,10 +42,13 @@ public class ResultActivity extends ActionBarActivity {
             result.setText("Fallo...\nVuelve a intentarlo");
             result.setTextColor(Color.RED);
         }
-
-
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
