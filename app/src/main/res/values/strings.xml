@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Suerte</string>
+    <string name="text1">Ingresa un número del 1 al 10</string>
+    <string name="button_text">Voy a tener suerte</string>
+    <string name="action_settings">Configuración</string>
+    <string name="title_activity_result">ResultActivity</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
 </resources>
