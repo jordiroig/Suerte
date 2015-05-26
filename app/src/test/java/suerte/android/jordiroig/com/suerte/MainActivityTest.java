@@ -1,7 +1,9 @@
 package suerte.android.jordiroig.com.suerte;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +15,7 @@ import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowIntent;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.robolectric.Robolectric.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
@@ -20,6 +23,7 @@ import static org.robolectric.Robolectric.shadowOf;
 public class MainActivityTest {
 
     private MainActivity activity;
+
     private EditText result;
     private Integer valor;
     private Integer min;
@@ -57,15 +61,71 @@ public class MainActivityTest {
     }
 
     @Test
-    public void clickingButton_shouldStartResultActivity2() throws Exception
+    public void clickingButton_shouldStartResultActivity2()
     {
         result.setText(valor.toString());
         activity.findViewById(R.id.main_button).performClick();
 
-        ShadowActivity shadowActivity = shadowOf(activity);
-        Intent startedIntent = shadowActivity.getNextStartedActivity();
-        ShadowIntent shadowIntent = shadowOf(startedIntent);
+        ShadowActivity shadow = shadowOf(activity);
+        Intent nextActivity = shadow.getNextStartedActivity();
+        ShadowIntent shadowIntent = shadowOf(nextActivity);
+        assertEquals(ResultActivity.class.getName(),
+                shadowIntent.getComponent().getClassName());
+    }
 
-        assertThat(shadowActivity.findViewById(R.id.received_text)).isEqualTo(valor);
+    @Test
+    public void prova()
+    {
+        result.setText(valor.toString());
+        activity.findViewById(R.id.main_button).performClick();
+
+        ShadowActivity shadow = shadowOf(activity);
+        Intent nextActivity = shadow.getNextStartedActivity();
+        ResultActivity activity2 = Robolectric.buildActivity(ResultActivity.class).withIntent(nextActivity).create().get();
+
+        ShadowActivity testActivity = Robolectric.shadowOf(activity2);
+
+        Intent nextIntent = activity2.getIntent();
+        String extra = nextIntent.getExtras().get("value").toString();
+
+        assertEquals(extra,
+                valor.toString());
+
+        TextView correct = (TextView) testActivity.findViewById(R.id.correct_text);
+        TextView result_text = (TextView) testActivity.findViewById(R.id.result_text);
+        String number = correct.getText().toString().substring(correct.getText().toString().length() - 1);
+        if(valor.toString().equals(number))
+        {
+            assertEquals(result_text.getCurrentTextColor(), Color.GREEN);
+        }
+        else
+        {
+            assertEquals(result_text.getCurrentTextColor(), Color.RED);
+            assertEquals(result_text.getText().toString(), "Fallo...\nVuelve a intentarlo");
+        }
+    }
+
+    @Test
+    public void prova2()
+    {
+        Intent intent = new Intent(Robolectric.getShadowApplication().getApplicationContext(), ResultActivity.class);
+        intent.putExtra("value", valor);
+        intent.putExtra("min", min);
+        intent.putExtra("max", max);
+        ResultActivity activity = Robolectric.buildActivity(ResultActivity.class).withIntent(intent).create().get();
+        ShadowActivity testActivity = Robolectric.shadowOf(activity);
+
+        TextView correct = (TextView) testActivity.findViewById(R.id.correct_text);
+        TextView result_text = (TextView) testActivity.findViewById(R.id.result_text);
+        String number = correct.getText().toString().substring(correct.getText().toString().length() - 1);
+        if(valor.toString().equals(number))
+        {
+            assertEquals(result_text.getCurrentTextColor(), Color.GREEN);
+        }
+        else
+        {
+            assertEquals(result_text.getCurrentTextColor(), Color.RED);
+            assertEquals(result_text.getText().toString(), "Fallo...\nVuelve a intentarlo");
+        }
     }
 }
